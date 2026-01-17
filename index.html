@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curriculo Pro AI | Gerador Profissional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+        .resume-page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: auto;
+            background: white;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        @media print {
+            body { background: white; padding: 0; margin: 0; }
+            .no-print { display: none !important; }
+            .resume-page { 
+                box-shadow: none !important; 
+                margin: 0 !important; 
+                width: 100% !important;
+                padding: 10mm !important;
+            }
+        }
+        .ai-loading { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+    </style>
+    <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@^1.37.0",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/"
+  }
+}
+</script>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+
+    <!-- Navbar -->
+    <nav class="no-print bg-slate-900 text-white px-6 py-4 flex justify-between items-center z-50">
+        <div class="flex items-center gap-3">
+            <div class="bg-blue-600 p-2 rounded-lg">
+                <i class="fas fa-file-contract text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold leading-none">Curriculo Pro AI</h1>
+                <span class="text-[10px] text-slate-400 uppercase tracking-widest">Powered by Gemini</span>
+            </div>
+        </div>
+        <div class="flex gap-3">
+            <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 shadow-lg">
+                <i class="fas fa-download"></i> <span class="hidden sm:inline">Baixar PDF</span>
+            </button>
+            <button id="btnEmail" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-lg font-medium transition-colors border border-slate-700 flex items-center gap-2">
+                <i class="fas fa-paper-plane"></i> <span class="hidden sm:inline">Enviar</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
+        
+        <!-- Mobile Tabs -->
+        <div class="md:hidden flex bg-white border-b no-print">
+            <button onclick="switchTab('edit')" id="tabEdit" class="flex-1 py-3 text-sm font-bold border-b-2 border-blue-600 text-blue-600">EDITAR</button>
+            <button onclick="switchTab('preview')" id="tabPreview" class="flex-1 py-3 text-sm font-bold text-slate-400">VISUALIZAR</button>
+        </div>
+
+        <!-- Form Side -->
+        <div id="sideEdit" class="flex-1 overflow-y-auto p-6 md:p-10 no-print bg-white border-r border-slate-200">
+            <div class="max-w-2xl mx-auto space-y-10">
+                
+                <!-- Personal Info -->
+                <section>
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <i class="fas fa-user text-blue-600"></i> Informações Pessoais
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="sm:col-span-2">
+                            <label class="text-xs font-bold text-slate-500 uppercase">Nome Completo</label>
+                            <input type="text" id="inFullName" class="w-full p-2 border rounded-md mt-1 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Ex: João Silva">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase">Título Profissional</label>
+                            <input type="text" id="inTitle" class="w-full p-2 border rounded-md mt-1" placeholder="Ex: Desenvolvedor Frontend">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase">Localização</label>
+                            <input type="text" id="inLocation" class="w-full p-2 border rounded-md mt-1" placeholder="Ex: São Paulo, SP">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase">E-mail</label>
+                            <input type="email" id="inEmail" class="w-full p-2 border rounded-md mt-1">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase">Telefone</label>
+                            <input type="text" id="inPhone" class="w-full p-2 border rounded-md mt-1">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Summary -->
+                <section>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-slate-800">Resumo Profissional</h3>
+                        <button onclick="optimizeSummary()" class="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 transition-all font-bold flex items-center gap-1 border border-blue-200">
+                            <i class="fas fa-magic"></i> Otimizar com IA
+                        </button>
+                    </div>
+                    <textarea id="inSummary" rows="4" class="w-full p-3 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500" placeholder="Fale sobre suas principais conquistas..."></textarea>
+                </section>
+
+                <!-- Experience -->
+                <section>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-slate-800">Experiência Profissional</h3>
+                        <button onclick="addExperience()" class="text-xs text-blue-600 font-bold hover:underline">+ Adicionar Cargo</button>
+                    </div>
+                    <div id="experienceList" class="space-y-4"></div>
+                </section>
+
+                <!-- Education -->
+                <section>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-slate-800">Educação</h3>
+                        <button onclick="addEducation()" class="text-xs text-blue-600 font-bold hover:underline">+ Adicionar Formação</button>
+                    </div>
+                    <div id="educationList" class="space-y-4"></div>
+                </section>
+
+                <!-- Skills -->
+                <section>
+                    <h3 class="text-lg font-bold text-slate-800 mb-4">Habilidades (Separadas por vírgula)</h3>
+                    <input type="text" id="inSkills" class="w-full p-2 border rounded-md" placeholder="Ex: JavaScript, Gestão de Projetos, Inglês Avançado">
+                </section>
+
+            </div>
+        </div>
+
+        <!-- Preview Side -->
+        <div id="sidePreview" class="hidden md:flex flex-1 overflow-y-auto bg-slate-200 p-4 md:p-8 justify-center">
+            <div id="resume-preview" class="resume-page">
+                <!-- Header -->
+                <header class="border-b-4 border-slate-800 pb-6 mb-8 text-center md:text-left">
+                    <h1 id="outFullName" class="text-4xl font-extrabold text-slate-900 uppercase tracking-tighter">SEU NOME</h1>
+                    <p id="outTitle" class="text-xl text-blue-600 font-medium mt-1">Cargo Desejado</p>
+                    <div class="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-2 mt-4 text-sm text-slate-600">
+                        <span id="outEmailDisplay" class="flex items-center gap-2"><i class="fas fa-envelope text-slate-400"></i> <span id="outEmail">email@exemplo.com</span></span>
+                        <span id="outPhoneDisplay" class="flex items-center gap-2"><i class="fas fa-phone text-slate-400"></i> <span id="outPhone">11 99999-9999</span></span>
+                        <span id="outLocationDisplay" class="flex items-center gap-2"><i class="fas fa-map-marker-alt text-slate-400"></i> <span id="outLocation">Cidade, UF</span></span>
+                    </div>
+                </header>
+
+                <div class="space-y-8">
+                    <!-- Summary -->
+                    <section id="outSummarySection">
+                        <h2 class="text-sm font-black uppercase tracking-widest text-slate-400 mb-2 border-b border-slate-100 pb-1">Perfil Profissional</h2>
+                        <p id="outSummary" class="text-sm leading-relaxed text-slate-700 text-justify">Seu resumo profissional aparecerá aqui...</p>
+                    </section>
+
+                    <!-- Experience -->
+                    <section id="outExpSection">
+                        <h2 class="text-sm font-black uppercase tracking-widest text-slate-400 mb-4 border-b border-slate-100 pb-1">Histórico Profissional</h2>
+                        <div id="outExperience" class="space-y-6"></div>
+                    </section>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        <!-- Education -->
+                        <section id="outEduSection">
+                            <h2 class="text-sm font-black uppercase tracking-widest text-slate-400 mb-4 border-b border-slate-100 pb-1">Formação Acadêmica</h2>
+                            <div id="outEducation" class="space-y-4"></div>
+                        </section>
+
+                        <!-- Skills -->
+                        <section id="outSkillsSection">
+                            <h2 class="text-sm font-black uppercase tracking-widest text-slate-400 mb-4 border-b border-slate-100 pb-1">Principais Habilidades</h2>
+                            <div id="outSkills" class="flex flex-wrap gap-2"></div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
