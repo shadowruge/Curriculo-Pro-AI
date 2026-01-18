@@ -34,6 +34,12 @@ O **Curriculo Pro AI** é uma ferramenta web leve e moderna para criação de cu
 ├── index.html   # Estrutura principal e estilos de impressão
 ├── script.js    # Lógica de renderização e automação de e-mail
 └── README.md    # Documentação do projeto
+<<<<<<< HEAD
 
 ## 📝 Licença
 Este projeto é de uso livre para fins educacionais e profissionais.
+=======
+``` 
+## 📝 Licença
+Este projeto é de uso livre para fins educacionais e profissionais.
+>>>>>>> a8d2317aabf42817929f11eb7972c427c2f8d5db
