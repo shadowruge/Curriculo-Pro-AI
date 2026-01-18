@@ -16,20 +16,68 @@
             --text-primary: #0f172a;
             --text-secondary: #475569;
             --border-color: #e2e8f0;
+            --nav-bg: #1e293b;
+            --scrollbar-thumb: #cbd5e1;
         }
         
-        .dark {
+        body.dark {
             --bg-primary: #0f172a;
             --bg-secondary: #1e293b;
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
             --border-color: #334155;
+            --nav-bg: #0f172a;
+            --scrollbar-thumb: #475569;
         }
 
         body { 
             font-family: 'Inter', sans-serif; 
             background-color: var(--bg-primary);
             transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        /* Elementos que usam variáveis CSS para tema */
+        body.dark #sideEdit,
+        body.dark .resume-page {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        
+        body.dark #sideEdit input,
+        body.dark #sideEdit textarea {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+        
+        body.dark #sideEdit label {
+            color: var(--text-secondary);
+        }
+        
+        body.dark .resume-page header h1,
+        body.dark .resume-page h2,
+        body.dark .resume-page h3,
+        body.dark .resume-page p,
+        body.dark .resume-page span {
+            color: var(--text-primary);
+        }
+        
+        body.dark .resume-page header {
+            border-color: var(--border-color);
+        }
+        
+        body.dark .resume-page .text-slate-600,
+        body.dark .resume-page .text-slate-700 {
+            color: var(--text-secondary) !important;
+        }
+        
+        body.dark #sidePreview {
+            background-color: var(--bg-primary);
+        }
+        
+        /* Scrollbar tema escuro */
+        body.dark #sideEdit::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
         }
         
         .resume-page {

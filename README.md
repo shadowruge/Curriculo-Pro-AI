@@ -1,44 +1,35 @@
 # 📝 Curriculo Pro AI
 
-O **Curriculo Pro AI** é uma ferramenta web leve e moderna para criação de currículos profissionais em tempo real. Com uma interface dividida, o usuário visualiza instantaneamente como o documento ficará impresso enquanto preenche seus dados.
+O **Curriculo Pro AI** é uma ferramenta web moderna para criação de currículos profissionais com visualização em tempo real e layout otimizado para ATS.
 
 ## ✨ Funcionalidades
 
-* **Edição em Tempo Real:** Veja as alterações na prévia do currículo conforme digita.
-* **Design Profissional:** Layout otimizado para ATS (sistemas de triagem de currículos) e leitura humana.
-* **Seções Dinâmicas:** Adicione ou remova experiências profissionais e formações acadêmicas conforme necessário.
-* **Exportação em PDF:** Função de impressão configurada para gerar um PDF perfeito, sem cortes de página indesejados.
-* **Envio Direto:** Botão integrado para enviar os dados principais diretamente para o e-mail de um recrutador.
-* **Responsivo:** Funciona em computadores e dispositivos móveis com alternância de abas inteligente.
+- Edição em tempo real
+- Design profissional e compatível com ATS
+- Seções dinâmicas (Experiência e Educação)
+- Exportação para PDF via impressão
+- Geração automática de e-mail profissional para envio ao recrutador
+- Tema claro/escuro
+- Persistência local (LocalStorage)
+- Interface responsiva
 
-## 🚀 Tecnologias Utilizadas
+## 🚀 Tecnologias
 
-* **HTML5:** Estrutura semântica.
-* **Tailwind CSS:** Estilização moderna, rápida e responsiva.
-* **JavaScript (Vanilla):** Lógica de manipulação de DOM, persistência e integração de e-mail sem dependências externas.
-* **Font Awesome:** Ícones intuitivos.
-* **Google Fonts (Inter):** Tipografia focada em legibilidade.
+- HTML5
+- Tailwind CSS
+- JavaScript (Vanilla)
+- Font Awesome
+- Google Fonts (Inter)
 
-## 🛠️ Como Usar
-
-1.  **Preenchimento:** Comece inserindo seus dados pessoais e resumo.
-2.  **Personalização:** Adicione suas experiências e educação clicando nos botões `+ Adicionar`.
-3.  **Habilidades:** Digite suas competências separadas por vírgula para gerar etiquetas automáticas.
-4.  **Exportação:**
-    * Clique em **Imprimir / PDF** para salvar o arquivo final.
-    * Clique em **Enviar para Recrutador** para abrir seu cliente de e-mail com uma apresentação profissional já redigida.
-
-## 📂 Estrutura do Projeto
+## 📂 Estrutura
 
 ```plaintext
-├── index.html   # Estrutura principal e estilos de impressão
-├── script.js    # Lógica de renderização e automação de e-mail
-└── README.md    # Documentação do projeto
+├── index.html
+├── script.js
+└── README.md
+```
+## 📄 Licença
 
-``` 
-## 📝 Licença
-Este projeto é de uso livre para fins educacionais e profissionais.
+Uso livre para fins educacionais e profissionais.
 
-## Experimenta!
-[LINK](https://shadowruge.github.io/Curriculo-Pro-AI/)
-
+🔗 Demo: https://shadowruge.github.io/Curriculo-Pro-AI/

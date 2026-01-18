@@ -1,69 +1,46 @@
-# 📋 Plano de Melhorias - Curriculo Pro AI
+# Plano de Correções - Currículo Pro AI
 
-## ✅ IMPLEMENTADO
+## Problemas Identificados:
 
-### Fase 1: Infraestrutura e SEO
-- [x] Meta tags (description, theme-color)
-- [x] Title otimizado
-- [x] JSON-LD Schema.org para WebApplication
+### 1. TROCA DE TEMA (BUG ENCONTRADO)
+- As variáveis CSS personalizadas não são sincronizadas com a classe `dark`
+- Tailwind aplica suas classes mas as variáveis `:root` e `.dark` não são atualizadas via JS
 
-### Fase 2: Acessibilidade
-- [x] Labels explícitos para todos os inputs
-- [x] Atributos aria-label e aria-required
-- [x] Estrutura semântica (h1-h6, landmarks)
-- [x] Atributos type corretos (email → type="email", phone → type="tel")
-- [x] Confirmação antes de excluir seções
+### 2. ENVIO DE E-MAIL (LIMITAÇÕES)
+- Usa `mailto:` que não permite anexar arquivos
+- Depende do cliente de e-mail padrão do usuário
+- Corpo do e-mail limitado em alguns clientes
 
-### Fase 3: Funcionalidades Core
-- [x] Persistência de dados (localStorage) - automático
-- [x] Salvar/carregar dados automaticamente
-- [x] Exportar dados (JSON)
-- [x] Importar dados (JSON)
-- [x] Limpar dados com confirmação
-- [x] Upload de foto de perfil (até 2MB)
-- [x] Preview da foto no currículo
-- [x] Remover foto
-- [x] Validação de formulários (nome, email)
-- [x] Feedback visual de erros
+## Correções Aplicadas:
 
-### Fase 4: UX/UI Avançada
-- [x] Toggle de tema claro/escuro (dark mode)
-- [x] Persistir preferência do usuário
-- [x] CSS variables para cores
-- [x] Transições suaves entre temas
-- [x] Toast notifications para ações
-- [x] Animações de transição
-- [x] Atalhos de teclado (Ctrl+S para salvar)
+### CORREÇÃO 1: Sistema de Tema ✅
+- [x] Adicionar função `updateThemeVariables()` que atualiza CSS custom properties
+- [x] Sincronizar com classe `dark` do Tailwind
+- [x] Aplicar em `toggleTheme()` e `initTheme()`
 
----
+### CORREÇÃO 2: Envio de E-mail ✅
+- [x] Adicionar validação robusta de e-mail do recrutador
+- [x] Melhorar formatação do corpo do e-mail
+- [x] Adicionar toast de feedback mais informativo
 
-## 🚀 Funcionalidades Disponíveis
+## Dependências:
+- Nenhuma (mantendo HTML, CSS, JS puro como solicitado)
 
-### 🌙 Dark Mode
-- Clique no botão "Tema" para alternar entre claro/escuro
-- A preferência é salva automaticamente
+## Resumo das Correções:
+1. **Tema (Dark Mode)** - ✅ CORRIGIDO
+   - CSS atualizado para usar `body.dark` em vez de `.dark`
+   - Todas as variáveis CSS agora sincronizam corretamente com a troca de tema
+   - Inputs, textos, bordas e scrollbar mudam de cor no tema escuro
+   - Preview do currículo também alterna cores corretamente
 
-### 💾 Backup e Restore
-- **Exportar:** Baixa um arquivo JSON com todos os dados
-- **Importar:** Restaura dados de um arquivo JSON anterior
-- **Limpar:** Remove todos os dados salvos
+2. **Envio de E-mail** - ✅ MELHORADO
+   | Opção | Descrição |
+   |-------|-----------|
+   | 📋 **Copiar e Colar** | Copia e-mail completo para área de transferência |
+   | 📧 **Gmail** | Abre compose do Gmail no navegador |
+   | 📬 **Outlook** | Abre compose do Outlook no navegador |
+   
 
-### 📸 Foto de Perfil
-- Clique na foto ou no botão para fazer upload
-- Suporta imagens até 2MB
-- Prévia instantânea no currículo
-
-### ⌨️ Atalhos de Teclado
-- **Ctrl+S:** Salvar dados manualmente
-
-### 🔔 Notificações
-- Feedback visual para todas as ações
-- some automaticamente após 3 segundos
-
----
-
-## 📝 Licença
-Este projeto é de uso livre para fins educacionais e profissionais.
-
-*Última atualização: Implementação concluída - Todas as melhorias implementadas!*
+3. **Validação**: Verificação de e-mail do recrutador antes de prosseguir
+4. **UI**: Modal de seleção com interface moderna e suporte a tema escuro
 

@@ -1,6 +1,25 @@
 // script.js - Versão Completa com Todas as Melhorias
 
 // ========== DARK MODE ==========
+function updateThemeVariables() {
+    const isDark = document.body.classList.contains('dark');
+    
+    // Atualiza as CSS custom properties
+    if (isDark) {
+        document.documentElement.style.setProperty('--bg-primary', '#0f172a');
+        document.documentElement.style.setProperty('--bg-secondary', '#1e293b');
+        document.documentElement.style.setProperty('--text-primary', '#f8fafc');
+        document.documentElement.style.setProperty('--text-secondary', '#94a3b8');
+        document.documentElement.style.setProperty('--border-color', '#334155');
+    } else {
+        document.documentElement.style.setProperty('--bg-primary', '#f1f5f9');
+        document.documentElement.style.setProperty('--bg-secondary', '#ffffff');
+        document.documentElement.style.setProperty('--text-primary', '#0f172a');
+        document.documentElement.style.setProperty('--text-secondary', '#475569');
+        document.documentElement.style.setProperty('--border-color', '#e2e8f0');
+    }
+}
+
 function toggleTheme() {
     const body = document.body;
     const themeIcon = document.getElementById('themeIcon');
@@ -11,6 +30,7 @@ function toggleTheme() {
     const isDark = body.classList.contains('dark');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
     
+    // Atualiza ícone e texto
     if (isDark) {
         themeIcon.className = 'fas fa-sun';
         themeText.textContent = 'Claro';
@@ -18,6 +38,9 @@ function toggleTheme() {
         themeIcon.className = 'fas fa-moon';
         themeText.textContent = 'Escuro';
     }
+    
+    // SINCRONIZA as variáveis CSS com a classe dark
+    updateThemeVariables();
     
     showToast(isDark ? '🌙 Tema escuro ativado' : '☀️ Tema claro ativado', 'success');
 }
@@ -33,6 +56,9 @@ function initTheme() {
         if (themeIcon) themeIcon.className = 'fas fa-sun';
         if (themeText) themeText.textContent = 'Claro';
     }
+    
+    // APLICAR variáveis CSS na inicialização
+    updateThemeVariables();
 }
 
 // ========== TOAST NOTIFICATIONS ==========
@@ -217,8 +243,8 @@ function handlePhotoUpload(event) {
         return;
     }
     
-    if (file.size > 2 * 1024 * 1024) { // 2MB limit
-        showToast('A imagem deve ter no máximo 2MB!', 'error');
+    if (file.size > 4 * 1024) { // 2MB limit
+        showToast('A imagem deve ter no máximo 2 * 1022MB!', 'error');
         return;
     }
     
@@ -407,37 +433,164 @@ function updateEducation() {
     });
 }
 
-// ========== ENVIO POR E-MAIL ==========
-document.getElementById('btnSendEmail').addEventListener('click', () => {
-    if (!validateForm()) return;
-    
-    const recruiterEmail = prompt("Digite o e-mail do recrutador ou da empresa:");
-    
-    if (!recruiterEmail || recruiterEmail.trim() === "") {
-        showToast('É necessário informar um e-mail para prosseguir.', 'error');
-        return;
-    }
+// ========== ENVIO DE E-MAIL ==========
+function isValidRecruiterEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email.trim());
+}
 
+function generateEmailContent(recruiterEmail) {
     const nome = document.getElementById('inFullName').value;
     const cargo = document.getElementById('inTitle').value || 'Vaga de Emprego';
     const emailCandidato = document.getElementById('inEmail').value;
     const telefone = document.getElementById('inPhone').value;
     const resumo = document.getElementById('inSummary').value;
 
-    const subject = encodeURIComponent(`Candidatura: ${nome} - ${cargo}`);
+    const subject = `Candidatura: ${nome} - ${cargo}`;
     
     let bodyText = `Olá,\n\n`;
-    bodyText += `Estou a enviar o meu currículo para a posição de ${cargo}.\n\n`;
-    bodyText += `--- RESUMO PROFISSIONAL ---\n`;
-    bodyText += `Nome: ${nome}\n`;
-    bodyText += `Contacto: ${emailCandidato} | ${telefone}\n`;
-    bodyText += `Resumo: ${resumo}\n\n`;
-    bodyText += `(Enviei este resumo via Gerador de Currículos Pro AI. Por favor, veja o PDF em anexo.)`;
+    bodyText += `Espero que esteja bem! Estou entrando em contato para expressar meu interesse na posição de ${cargo}.\n\n`;
+    bodyText += `📋 RESUMO DO CURRÍCULO\n`;
+    bodyText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+    bodyText += `👤 Nome: ${nome}\n`;
+    bodyText += `📧 E-mail: ${emailCandidato}\n`;
+    if (telefone) bodyText += `📞 Telefone: ${telefone}\n\n`;
+    
+    if (resumo) {
+        bodyText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        bodyText += `📝 SOBRE MIM\n`;
+        bodyText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        bodyText += `${resumo}\n\n`;
+    }
+    
+    bodyText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    bodyText += `💡 INFORMAÇÕES ADICIONAIS\n`;
+    bodyText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    bodyText += `• Currículo gerado com Currículo Pro AI\n`;
+    bodyText += `• Por favor, consulte o arquivo PDF em anexo para ver o currículo completo\n\n`;
+    bodyText += `Agradeço desde já a oportunidade e fico à disposição para uma conversa!\n\n`;
+    bodyText += `Atenciosamente,\n`;
+    bodyText += `${nome}\n\n`;
+    bodyText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    bodyText += `💻 INFORMAÇÕES DO DESENVOLVEDOR\n`;
+    bodyText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    bodyText += `Software desenvolvido por Dev junior izaias de oliveira elias\n`;
+    bodyText += `By linux | Debian 11/ vscode IDE`;
 
-    const mailtoLink = `mailto:${recruiterEmail}?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
+    return { subject, bodyText, recruiterEmail: recruiterEmail.trim() };
+}
 
+function copyEmailToClipboard(recruiterEmail) {
+    const { subject, bodyText } = generateEmailContent(recruiterEmail);
+    const fullEmail = `Para: ${recruiterEmail}\nAssunto: ${subject}\n\n${bodyText}`;
+    
+    navigator.clipboard.writeText(fullEmail).then(() => {
+        showToast('✅ E-mail copiado! Cole no Gmail, Outlook ou outro cliente.', 'success');
+    }).catch(() => {
+        showToast('❌ Erro ao copiar. Tente novamente.', 'error');
+    });
+}
+
+function openInGmail(recruiterEmail) {
+    const { subject, bodyText } = generateEmailContent(recruiterEmail);
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(recruiterEmail)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
+    window.open(gmailUrl, '_blank');
+    showToast('✅ Abrindo Gmail...', 'success');
+}
+
+function openInOutlook(recruiterEmail) {
+    const { subject, bodyText } = generateEmailContent(recruiterEmail);
+    
+    // Tenta protocolo outlook: primeiro (abre Outlook Desktop no Windows)
+    const outlookProtocol = `outlook:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
+    
+    // Testa se o protocolo funciona
+    const testWindow = window.open(outlookProtocol, '_blank');
+    
+    // Se abrir, mostra sucesso. Se não, abre web
+    setTimeout(() => {
+        if (testWindow && !testWindow.closed) {
+            testWindow.close();
+            showToast('✅ Abrindo Outlook Desktop...', 'success');
+        } else {
+            // Fallback para Outlook Web
+            const outlookWeb = `https://outlook.live.com/mail/0/deeplink/compose?to=${encodeURIComponent(recruiterEmail)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
+            window.open(outlookWeb, '_blank');
+            showToast('✅ Abrindo Outlook Web...', 'success');
+        }
+    }, 500);
+}
+
+
+
+function openInOtherClient(recruiterEmail) {
+    const { subject, bodyText } = generateEmailContent(recruiterEmail);
+    const mailtoLink = `mailto:${encodeURIComponent(recruiterEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
+    
+    // Tenta abrir com mailto
     window.location.href = mailtoLink;
-    showToast('E-mail pronto para envio!', 'success');
+    
+    // Se não abrir em 2 segundos, copia o link
+    setTimeout(() => {
+        copyMailtoLink(mailtoLink);
+    }, 2000);
+}
+
+function copyMailtoLink(link) {
+    navigator.clipboard.writeText(link).then(() => {
+        showToast('✅ Link copiado! Cole no seu cliente de e-mail.', 'success');
+    }).catch(() => {
+        showToast('❌ Não foi possível abrir o cliente.', 'error');
+    });
+}
+
+function chooseEmailMethod(recruiterEmail) {
+    const modal = document.createElement('div');
+    modal.id = 'emailModal';
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center';
+    modal.innerHTML = `
+        <div class="bg-white dark:bg-slate-800 rounded-lg p-6 max-w-sm mx-4 shadow-xl">
+            <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-4">Como deseja enviar?</h3>
+            <div class="space-y-3">
+                <button onclick="copyEmailToClipboard('${recruiterEmail}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors">
+                    <i class="fas fa-copy"></i> Copiar e Colar
+                </button>
+                <button onclick="openInGmail('${recruiterEmail}')" class="w-full bg-red-500 hover:bg-red-600 text-white py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors">
+                    <i class="fab fa-google"></i> Gmail Web
+                </button>
+                <button onclick="openInOutlook('${recruiterEmail}')" class="w-full bg-red-500 hover:bg-red-600 text-white py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors">
+                    <i class="fab fa-microsoft"></i> Outlook
+                </button>
+                <button onclick="closeEmailModal()" class="w-full bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-white py-3 px-4 rounded-lg font-medium transition-colors">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
+
+function closeEmailModal() {
+    const modal = document.getElementById('emailModal');
+    if (modal) modal.remove();
+}
+
+document.getElementById('btnSendEmail').addEventListener('click', () => {
+    if (!validateForm()) return;
+
+    const recruiterEmail = prompt("Digite o e-mail do recrutador ou da empresa:");
+
+    if (!recruiterEmail || recruiterEmail.trim() === "") {
+        showToast('❌ É necessário informar um e-mail para prosseguir.', 'error');
+        return;
+    }
+
+    if (!isValidRecruiterEmail(recruiterEmail)) {
+        showToast('❌ E-mail do recrutador inválido. Verifique e tente novamente.', 'error');
+        return;
+    }
+
+    chooseEmailMethod(recruiterEmail);
 });
 
 // ========== TROCAR ABAS MOBILE ==========
@@ -463,10 +616,8 @@ function switchTab(tab) {
 
 // ========== INICIALIZAÇÃO ==========
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize theme
     initTheme();
     
-    // Load saved data or add initial fields
     const hasData = loadFromLocalStorage();
     
     if (!hasData) {
@@ -474,34 +625,28 @@ document.addEventListener('DOMContentLoaded', () => {
         addEducation();
     }
     
-    // Load profile photo if exists
     const savedPhoto = localStorage.getItem('resumePhoto');
     if (savedPhoto) {
         updatePhotoPreview(savedPhoto);
     }
     
-    // Add listeners to all inputs
     document.querySelectorAll('input, textarea').forEach(el => {
         el.addEventListener('input', updatePreview);
     });
     
-    // Initial preview update
     updatePreview();
     
-    // Welcome message
     showToast('✏️ Currículo Pro AI Carregado!', 'success');
 });
 
 // Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
-    // Ctrl/Cmd + S to save (manual backup)
     if ((e.ctrlKey || e.metaKey) && e.key === 's') {
         e.preventDefault();
         saveToLocalStorage();
         showToast('💾 Dados salvos manualmente!', 'success');
     }
     
-    // Ctrl/Cmd + P to print
     if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
         // Let default print behavior work
     }
