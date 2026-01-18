@@ -38,3 +38,5 @@ O **Curriculo Pro AI** é uma ferramenta web leve e moderna para criação de cu
 ## 📝 Licença
 Este projeto é de uso livre para fins educacionais e profissionais.
 
+## Experimenta!
+[LINK](https://shadowruge.github.io/Curriculo-Pro-AI/)
