@@ -17,7 +17,7 @@ O **Curriculo Pro AI** é uma ferramenta web moderna para criação de currícul
 
 - HTML5
 - Tailwind CSS
-- JavaScript (Vanilla)
+- JavaScript
 - Font Awesome
 - Google Fonts (Inter)
 
